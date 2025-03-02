@@ -6,7 +6,7 @@ import PlayerControls from "./PlayerControls";
 import { toast } from "@/components/ui/use-toast";
 
 const MusicPlayer = () => {
-  const { currentTrack, loading, getRandomTrack } = useRandomTrack();
+  const { currentTrack, loading, getNextTrack } = useRandomTrack();
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.7);
   const [muted, setMuted] = useState(false);
@@ -20,7 +20,7 @@ const MusicPlayer = () => {
   const nextTrack = () => {
     setIsPlaying(false);
     setReady(false);
-    getRandomTrack();
+    getNextTrack();
   };
 
   const toggleMute = () => {

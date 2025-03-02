@@ -7,64 +7,49 @@ const sampleTracks: Track[] = [
   {
     id: '1',
     title: 'Lofi Study Session',
-    artist: 'ChilledCow',
+    artist: 'Lofi Girl',
     youtubeId: 'jfKfPfyJRdk',
     thumbnailUrl: 'https://i.ytimg.com/vi/jfKfPfyJRdk/hqdefault.jpg',
     duration: 0, // Livestream
   },
   {
     id: '2',
-    title: 'Relaxing Jazz Piano',
-    artist: 'Cafe Music BGM',
-    youtubeId: '70j-u8z2zvg',
-    thumbnailUrl: 'https://i.ytimg.com/vi/70j-u8z2zvg/hqdefault.jpg',
+    title: 'synthwave radio 🌌 beats to chill/game to',
+    artist: 'Lofi Girl',
+    youtubeId: '4xDzrJKXOOY',
+    thumbnailUrl: 'https://i.ytimg.com/vi/4xDzrJKXOOY/hqdefault.jpg',
     duration: 0, // Livestream
   },
   {
     id: '3',
-    title: 'Ambient Study Music',
-    artist: 'DreamhopMusic',
-    youtubeId: 'sjkrrmBnpGE',
-    thumbnailUrl: 'https://i.ytimg.com/vi/sjkrrmBnpGE/hqdefault.jpg',
-    duration: 3600,
-  },
-  {
-    id: '4',
-    title: 'Work Music',
-    artist: 'Yellow Brick Cinema',
-    youtubeId: 'lTRiuFIWV54',
-    thumbnailUrl: 'https://i.ytimg.com/vi/lTRiuFIWV54/hqdefault.jpg',
+    title: 'Peaceful Lofi Coffee in 90\'s Tokyo Street 🌆 Rainy Lofi Hip Hop Mix 🌧️ Lofi Beats To Study/ Chill',
+    artist: 'Lofi on the Rooftop',
+    youtubeId: '4Q9jq-tdOoE',
+    thumbnailUrl: 'https://i.ytimg.com/vi/4Q9jq-tdOoE/hqdefault.jpg',
     duration: 0, // Livestream
-  },
-  {
-    id: '5',
-    title: 'Classical Music for Studying',
-    artist: 'HALIDONMUSIC',
-    youtubeId: 'y7e-GC6oGhg',
-    thumbnailUrl: 'https://i.ytimg.com/vi/y7e-GC6oGhg/hqdefault.jpg',
-    duration: 7200,
   },
 ];
 
 export const useRandomTrack = () => {
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
   const [loading, setLoading] = useState(true);
+  const [trackIndex, setTrackIndex] = useState(0);
 
-  const getRandomTrack = () => {
+  const getNextTrack = () => {
     setLoading(true);
-    const randomIndex = Math.floor(Math.random() * sampleTracks.length);
-    const track = sampleTracks[randomIndex];
+    const track = sampleTracks[trackIndex];
     
     // Simulate loading
     setTimeout(() => {
       setCurrentTrack(track);
       setLoading(false);
+      setTrackIndex((prevIndex) => (prevIndex + 1) % sampleTracks.length);
     }, 800);
   };
 
   useEffect(() => {
-    getRandomTrack();
+    getNextTrack();
   }, []);
 
-  return { currentTrack, loading, getRandomTrack };
+  return { currentTrack, loading, getNextTrack };
 };
