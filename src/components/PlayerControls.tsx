@@ -1,5 +1,4 @@
-
-import { ButtonHTMLAttributes, forwardRef } from "react";
+import { ButtonHTMLAttributes, forwardRef, CSSProperties } from "react";
 import { Play, Pause, SkipForward, Volume2, VolumeX } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -87,6 +86,7 @@ const PlayerControls = ({
           value={volume}
           onChange={(e) => setVolume(parseFloat(e.target.value))}
           className="volume-slider"
+          style={{ '--volume-percentage': `${volume * 100}%` } as CSSProperties}
           aria-label="Volume"
         />
       </div>

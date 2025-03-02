@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
@@ -129,15 +128,24 @@
 .volume-slider {
   @apply w-24 h-1 bg-player-muted rounded-full;
   appearance: none;
+  background: linear-gradient(to right, 
+    hsl(var(--player-foreground)) 0%, 
+    hsl(var(--player-foreground)) var(--volume-percentage, 50%), 
+    hsl(var(--player-muted)) var(--volume-percentage, 50%), 
+    hsl(var(--player-muted)) 100%);
 }
 
 .volume-slider::-webkit-slider-thumb {
-  @apply w-2.5 h-2.5 rounded-full bg-player-accent;
+  @apply w-2.5 h-2.5 rounded-full;
   appearance: none;
+  background: hsl(var(--player-foreground));
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .volume-slider::-moz-range-thumb {
-  @apply w-2.5 h-2.5 rounded-full bg-player-accent border-0;
+  @apply w-2.5 h-2.5 rounded-full border-0;
+  background: hsl(var(--player-foreground));
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 ::-webkit-scrollbar {
@@ -150,4 +158,8 @@
 
 ::-webkit-scrollbar-thumb {
   @apply bg-player-muted rounded-full;
+}
+
+::selection {
+  @apply bg-player-foreground text-player-background;
 }

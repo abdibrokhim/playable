@@ -11,7 +11,7 @@ const Index = () => {
             Random Tune
           </div>
           <h1 className="text-2xl font-semibold tracking-tight animate-fade-in">
-            Harmony Player
+            Playable
           </h1>
         </header>
         
@@ -19,6 +19,7 @@ const Index = () => {
         
         <footer className="mt-10 text-center text-xs text-foreground/50 animate-fade-in">
           <p>Playing random tracks from YouTube</p>
+          <a href="https://github.com/abdibrokhim/playable" target="_blank" rel="noopener noreferrer" className="text-[10px] underline hover:animate-fade-in">open source</a>
         </footer>
       </div>
       <Toaster />
