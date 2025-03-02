@@ -49,6 +49,7 @@ const PlayerControls = ({
         <PlayerButton
           onClick={togglePlay}
           className="w-12 h-12 bg-player-foreground text-player-background"
+          aria-label={isPlaying ? "Pause" : "Play"}
         >
           {isPlaying ? (
             <Pause className="w-5 h-5" />
@@ -59,6 +60,7 @@ const PlayerControls = ({
         <PlayerButton
           onClick={nextTrack}
           className="w-10 h-10 bg-player-muted"
+          aria-label="Skip to next track"
         >
           <SkipForward className="w-4 h-4" />
         </PlayerButton>
@@ -68,6 +70,7 @@ const PlayerControls = ({
         <PlayerButton
           onClick={toggleMute}
           className="w-8 h-8"
+          aria-label={muted ? "Unmute" : "Mute"}
         >
           {muted || volume === 0 ? (
             <VolumeX className="w-4 h-4" />
@@ -81,9 +84,10 @@ const PlayerControls = ({
           min="0"
           max="1"
           step="0.01"
-          value={muted ? 0 : volume}
+          value={volume}
           onChange={(e) => setVolume(parseFloat(e.target.value))}
           className="volume-slider"
+          aria-label="Volume"
         />
       </div>
     </div>

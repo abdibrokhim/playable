@@ -9,6 +9,13 @@ interface YouTubeAudioProps {
   onReady: () => void;
 }
 
+// Extend Window interface to include the YouTube API callback
+declare global {
+  interface Window {
+    onYouTubeIframeAPIReady: () => void;
+  }
+}
+
 const YouTubeAudio = ({ track, isPlaying, volume, onReady }: YouTubeAudioProps) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [playerReady, setPlayerReady] = useState(false);
