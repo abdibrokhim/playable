@@ -8,6 +8,7 @@ import { toast } from "@/components/ui/use-toast";
 const MusicPlayer = () => {
   const { currentTrack, loading, getRandomTrack } = useRandomTrack();
   const [isPlaying, setIsPlaying] = useState(false);
+  const [previousVolume, setPreviousVolume] = useState(0.7);
   const [volume, setVolume] = useState(0.7);
   const [muted, setMuted] = useState(false);
   const [ready, setReady] = useState(false);
@@ -24,7 +25,26 @@ const MusicPlayer = () => {
   };
 
   const toggleMute = () => {
-    setMuted(!muted);
+    if (muted) {
+      // Unmute - restore previous volume
+      setVolume(previousVolume);
+      setMuted(false);
+    } else {
+      // Mute - save current volume first
+      setPreviousVolume(volume);
+      setVolume(0);
+      setMuted(true);
+    }
+  };
+  
+  // Handle volume changes from slider
+  const handleVolumeChange = (newVolume: number) => {
+    setVolume(newVolume);
+    if (newVolume === 0) {
+      setMuted(true);
+    } else if (muted) {
+      setMuted(false);
+    }
   };
 
   const handleAudioReady = () => {
@@ -92,7 +112,7 @@ const MusicPlayer = () => {
           togglePlay={togglePlay}
           nextTrack={nextTrack}
           volume={volume}
-          setVolume={setVolume}
+          setVolume={handleVolumeChange}
           muted={muted}
           toggleMute={toggleMute}
         />
@@ -102,7 +122,7 @@ const MusicPlayer = () => {
       <YouTubeAudio
         track={currentTrack}
         isPlaying={isPlaying}
-        volume={muted ? 0 : volume}
+        volume={volume}
         onReady={handleAudioReady}
       />
     </div>
