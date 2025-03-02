@@ -34,6 +34,9 @@
     --player-foreground: 220 25% 10%;
     --player-accent: 250 84% 66%;
     --player-muted: 220 14% 90%;
+    --player-foreground-h: 220;
+    --player-foreground-s: 25%;
+    --player-foreground-l: 10%;
 
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
@@ -80,6 +83,9 @@
     --player-foreground: 240 6% 90%;
     --player-accent: 250 84% 66%;
     --player-muted: 240 6% 12%;
+    --player-foreground-h: 220;
+    --player-foreground-s: 25%;
+    --player-foreground-l: 10%;
 
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
@@ -108,7 +114,23 @@
 .track-progress {
   position: relative;
   overflow: hidden;
-  @apply h-1 w-full rounded-full bg-player-muted;
+  @apply h-16 w-full rounded-lg bg-player-muted/10;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+  margin: 0.5rem 0;
+}
+
+.track-progress::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(to bottom, 
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 100%);
+  pointer-events: none;
+  z-index: 2;
 }
 
 .track-progress-fill {
@@ -116,9 +138,135 @@
   top: 0;
   left: 0;
   height: 100%;
-  @apply bg-player-accent;
+  width: 100%;
   transform-origin: left;
-  animation: progress 30s linear infinite;
+  @apply bg-transparent;
+  display: flex;
+  align-items: center;
+}
+
+.wave-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  transition: all 0.5s ease;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  padding: 0 5px;
+  perspective: 500px;
+}
+
+.wave-container::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(to top, 
+    hsla(var(--player-foreground), 0.2) 0%,
+    transparent 100%);
+  filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  animation: glow-pulse 4s ease-in-out infinite;
+}
+
+.wave-container.active::after {
+  opacity: 1;
+}
+
+.wave-container.paused {
+  filter: grayscale(0.8);
+}
+
+.wave-container.paused .wave {
+  animation-play-state: paused;
+  opacity: 0.3 !important;
+  height: 20% !important;
+  transform: scaleY(0.5) !important;
+}
+
+.wave-container.active .wave {
+  animation-play-state: running;
+}
+
+.wave {
+  position: relative;
+  width: 4px;
+  height: 100%;
+  margin: 0 2px;
+  border-radius: 4px;
+  background: linear-gradient(to top, 
+    hsl(var(--player-foreground-h), var(--player-foreground-s), var(--player-foreground-l)) 0%,
+    hsl(calc(var(--player-foreground-h) + 20), var(--player-foreground-s), var(--player-foreground-l)) 50%,
+    hsl(calc(var(--player-foreground-h) + 40), var(--player-foreground-s), var(--player-foreground-l)) 100%);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  animation: wave-animation 1.2s ease-in-out infinite alternate;
+  transform-origin: bottom;
+  will-change: transform, height;
+}
+
+.wave::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: inherit;
+  border-radius: inherit;
+  filter: blur(3px);
+  opacity: 0.3;
+  z-index: -1;
+}
+
+.wave:nth-child(odd) {
+  animation-duration: 1.7s;
+}
+
+.wave:nth-child(even) {
+  animation-duration: 1.4s;
+}
+
+.wave:nth-child(3n) {
+  animation-duration: 1.1s;
+}
+
+.wave:nth-child(3n+1) {
+  animation-duration: 2s;
+}
+
+.wave:nth-child(5n) {
+  animation-duration: 1.5s;
+}
+
+@keyframes wave-animation {
+  0% {
+    height: calc(20% + var(--random-height, 10%));
+    filter: brightness(0.8);
+  }
+  50% {
+    filter: brightness(1.2);
+  }
+  100% {
+    height: calc(70% + var(--random-height, 20%));
+    filter: brightness(1);
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    opacity: 0.3;
+    filter: blur(8px);
+  }
+  50% {
+    opacity: 0.7;
+    filter: blur(12px);
+  }
 }
 
 .button-hover {

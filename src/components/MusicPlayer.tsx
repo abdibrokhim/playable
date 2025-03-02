@@ -1,5 +1,4 @@
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRandomTrack } from "@/hooks/useRandomTrack";
 import YouTubeAudio from "./YouTubeAudio";
 import PlayerControls from "./PlayerControls";
@@ -52,6 +51,30 @@ const MusicPlayer = () => {
     setIsPlaying(true);
   };
 
+  // Generate random wave heights for a more realistic visualization
+  const waveHeights = useMemo(() => {
+    // Create more bars for a richer visualization
+    return Array.from({ length: 24 }, () => ({
+      height: Math.random() * 0.5 + 0.2,
+      delay: Math.random() * 0.5,
+      speed: 0.8 + Math.random() * 1.2
+    }));
+  }, [currentTrack]);
+
+  // Simulate audio intensity changes
+  const [intensity, setIntensity] = useState(0.5);
+  
+  useEffect(() => {
+    if (!isPlaying) return;
+    
+    // Simulate changing audio intensity
+    const intensityInterval = setInterval(() => {
+      setIntensity(Math.random() * 0.6 + 0.4);
+    }, 800);
+    
+    return () => clearInterval(intensityInterval);
+  }, [isPlaying]);
+
   useEffect(() => {
     if (currentTrack && ready) {
       toast({
@@ -102,7 +125,23 @@ const MusicPlayer = () => {
         {/* Progress Bar */}
         <div className="w-full mb-6">
           <div className="track-progress">
-            <div className="track-progress-fill" />
+            <div className="track-progress-fill">
+              <div className={`wave-container ${isPlaying ? 'active' : 'paused'}`}>
+                {waveHeights.map((wave, index) => (
+                  <div 
+                    key={index} 
+                    className="wave" 
+                    style={{ 
+                      animationDuration: `${wave.speed}s`,
+                      animationDelay: `${wave.delay}s`,
+                      opacity: 0.7 - (index % 5 * 0.05),
+                      transform: `scaleY(${wave.height * intensity})`,
+                      '--random-height': `${wave.height * 30}%`
+                    } as React.CSSProperties}
+                  ></div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -130,3 +169,4 @@ const MusicPlayer = () => {
 };
 
 export default MusicPlayer;
+
