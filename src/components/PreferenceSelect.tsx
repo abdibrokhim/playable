@@ -1,25 +1,41 @@
-import { Circle, SparklesIcon, HelpCircle } from "lucide-react";
+import { Mars, Venus, Users } from "lucide-react";
 
 interface PreferenceSelectProps {
-  preference: "male" | "female" | "not-sure" | null;
-  setPreference: (preference: "male" | "female" | "not-sure" | null) => void;
+  preference: "male" | "female" | "group" | null;
+  setPreference: (preference: "male" | "female" | "group" | null) => void;
+  onBackToPreferences?: () => void;
+  showBack?: boolean;
 }
 
-export const PreferenceSelect = ({ preference, setPreference }: PreferenceSelectProps) => {
+export const PreferenceSelect = ({ 
+  preference, 
+  setPreference,
+  onBackToPreferences,
+  showBack = false
+}: PreferenceSelectProps) => {
+
   return (
     <div className="w-full">
+      {showBack && (
+        <button 
+          onClick={onBackToPreferences} 
+          className="text-sm text-player-foreground mb-4 flex items-center hover:underline"
+        >
+          ← Back to preferences
+        </button>
+      )}
       <p className="text-sm mb-3 text-center">Whom would you like to chat with?</p>
       <div className="grid grid-cols-3 gap-3">
         <button
           onClick={() => setPreference("male")}
-          className={`player-glass transition-all flex flex-col items-center justify-center p-4 border ${
+          className={`player-glass button-hover transition-all flex flex-col items-center justify-center p-4 border ${
             preference === "male"
               ? "border-player-foreground/80 bg-player-foreground/10"
               : "border-player-muted/30 hover:bg-player-muted/10"
           } rounded-lg`}
           aria-selected={preference === "male"}
         >
-          <Circle
+          <Mars
             className={`h-8 w-8 mb-2 ${
               preference === "male" ? "text-player-foreground" : "text-foreground/70"
             }`}
@@ -29,14 +45,14 @@ export const PreferenceSelect = ({ preference, setPreference }: PreferenceSelect
 
         <button
           onClick={() => setPreference("female")}
-          className={`player-glass transition-all flex flex-col items-center justify-center p-4 border ${
+          className={`player-glass button-hover transition-all flex flex-col items-center justify-center p-4 border ${
             preference === "female"
               ? "border-player-foreground/80 bg-player-foreground/10"
               : "border-player-muted/30 hover:bg-player-muted/10"
           } rounded-lg`}
           aria-selected={preference === "female"}
         >
-          <SparklesIcon
+          <Venus
             className={`h-8 w-8 mb-2 ${
               preference === "female" ? "text-player-foreground" : "text-foreground/70"
             }`}
@@ -45,20 +61,20 @@ export const PreferenceSelect = ({ preference, setPreference }: PreferenceSelect
         </button>
 
         <button
-          onClick={() => setPreference("not-sure")}
-          className={`player-glass transition-all flex flex-col items-center justify-center p-4 border ${
-            preference === "not-sure"
+          onClick={() => setPreference("group")}
+          className={`player-glass button-hover transition-all flex flex-col items-center justify-center p-4 border ${
+            preference === "group"
               ? "border-player-foreground/80 bg-player-foreground/10"
               : "border-player-muted/30 hover:bg-player-muted/10"
           } rounded-lg`}
-          aria-selected={preference === "not-sure"}
+          aria-selected={preference === "group"}
         >
-          <HelpCircle
+          <Users
             className={`h-8 w-8 mb-2 ${
-              preference === "not-sure" ? "text-player-foreground" : "text-foreground/70"
+              preference === "group" ? "text-player-foreground" : "text-foreground/70"
             }`}
           />
-          <span className="text-sm font-medium">Not Sure</span>
+          <span className="text-sm font-medium">Group Chat</span>
         </button>
       </div>
     </div>

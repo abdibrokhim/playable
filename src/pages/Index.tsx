@@ -1,12 +1,34 @@
 import { Toaster } from "@/components/ui/toaster";
 import MusicPlayer from "@/components/MusicPlayer";
 import ChatInterface from "@/components/ChatInterface";
+import { LogViewer } from "@/components/LogViewer";
 import { Analytics } from "@vercel/analytics/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { logger } from "@/utils/logger";
 
 const Index = () => {
   const [chatting, setChatting] = useState(false);
-  const [preference, setPreference] = useState<"male" | "female" | "not-sure" | null>(null);
+  const [preference, setPreference] = useState<"male" | "female" | "group" | null>(null);
+  
+  // Log key events for debugging
+  useEffect(() => {
+    logger.info("Index", "Application initialized");
+    
+    // Log localStorage for debugging gender/user settings
+    const userId = localStorage.getItem("user_id");
+    const userGender = localStorage.getItem("user_gender");
+    const username = localStorage.getItem("username");
+    
+    logger.debug("Index", "User data from localStorage", {
+      userId,
+      userGender,
+      username
+    });
+    
+    return () => {
+      logger.info("Index", "Application closing");
+    };
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-background to-background/80">
@@ -21,28 +43,31 @@ const Index = () => {
                 Playable
               </h1>
             </header>
-            
             <MusicPlayer />
-            
-            <footer className="mt-6 text-center text-xs text-foreground/50 animate-fade-in">
-              <p>Playing random tracks from YouTube</p>
-              <a href="https://github.com/abdibrokhim/playable" target="_blank" rel="noopener noreferrer" className="text-[10px] underline hover:animate-fade-in">open source</a>
-            </footer>
+            <div className="mt-6 text-center text-xs text-foreground/50 animate-fade-in">
+              <p>Playing random tracks from YouTube.</p>
+            </div>
           </div>
         </div>
-
+        
         {/* Right side - Chat Interface */}
         <div className="w-full md:w-1/2 p-6 flex items-center justify-center">
-          <ChatInterface 
-            chatting={chatting} 
-            setChatting={setChatting}
-            preference={preference}
-            setPreference={setPreference}
-          />
+          <div className="w-full max-w-md">
+            <ChatInterface 
+              chatting={chatting} 
+              setChatting={setChatting}
+              preference={preference}
+              setPreference={setPreference}
+            />
+            <div className="mt-6 text-center text-xs text-foreground/50 animate-fade-in">
+              <p>Messages are not saved.</p>
+            </div>
+          </div>
         </div>
       </main>
       
       <Toaster />
+      <LogViewer />
     </div>
   );
 };
